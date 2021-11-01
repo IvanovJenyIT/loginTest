@@ -50,6 +50,7 @@ function Login() {
   
   const login = async (email, passwor) => {
     try {
+      debugger
       let item = objToQueryString({
         login: email,
         password: sha256(passwor)
@@ -59,9 +60,7 @@ function Login() {
         headers: {
           "Content-Type": "application/json",
           "Accept": "application/json",
-          "Access-Control-Allow-Origin": "https://logintesthurghada.herokuapp.com/",
-          "Access-Control-Allow-Credentials": true,
-          "Access-Control-Expose-Headers:": "*" 
+          "Access-Control-Allow-Origin": "https://parsers-test.useid.pro/api",
         },
         body: JSON.stringify(),
       })
