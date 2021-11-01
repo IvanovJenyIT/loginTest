@@ -59,7 +59,9 @@ function Login() {
         headers: {
           "Content-Type": "application/json",
           "Accept": "application/json",
-          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Origin": "https://logintesthurghada.herokuapp.com/",
+          "Access-Control-Allow-Credentials": true,
+          "Access-Control-Expose-Headers:": "*" 
         },
         body: JSON.stringify(),
       })
