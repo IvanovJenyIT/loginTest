@@ -60,7 +60,7 @@ function Login() {
         headers: {
           "Content-Type": "application/json",
           "Accept": "application/json",
-          "Access-Control-Allow-Origin": "https://parsers-test.useid.pro/api",
+          "Access-Control-Allow-Origin": "https://parsers-test.useid.pro/api/",
         },
         body: JSON.stringify(),
       })
