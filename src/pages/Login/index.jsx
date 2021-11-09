@@ -12,9 +12,8 @@ import validationSchema from "./validation";
 import api from "../../services/api";
 import useAuth from "../../hooks/useAuth";
 import { Link } from "react-router-dom";
-import React, { useState } from "react";
+import { useState } from "react";
 import { sha256 } from "js-sha256";
-
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -28,7 +27,6 @@ const useStyles = makeStyles((theme) => ({
 function Login() {
   const classes = useStyles();
   const [isLoading, setIsLoading] = useState(false);
-  const [qwe, setQwe] = useState();
   const auth = useAuth();
 
   const {
@@ -40,65 +38,31 @@ function Login() {
     resolver: yupResolver(validationSchema),
   });
 
-  function objToQueryString(obj) {
-    const keyValuePairs = [];
-    for (const key in obj) {
-      keyValuePairs.push(encodeURIComponent(key) + '=' + encodeURIComponent(obj[key]));
-    }
-    return keyValuePairs.join('&');
-  }
-  
-  const login = async (email, passwor) => {
+  const onSubmit = async (data) => {
     try {
-      debugger
-      let item = objToQueryString({
-        login: email,
-        password: sha256(passwor)
-      })
-      let response = fetch(`https://parsers-test.useid.pro/api/login/login?${item}`, {
-        method: 'POST',
-        headers: {
-          "Content-Type": "application/json",
-          "Accept": "application/json",
-          "Access-Control-Allow-Origin": "https://parsers-test.useid.pro/api/",
-        },
-        body: JSON.stringify(),
-      })
-      
-      if(response.ok){
-        let json = await response.json()
-        console.log("response", json)
-      } else {
-        console.log("HTTP error", (await response).status)
+      setIsLoading(true);
+      console.log(data)
+      // debugger
+      const trem = {
+        login: data.email,
+        password: sha256(data.password)
       }
-    }  catch (err) {
-      console.log("response", err)
+      const { data: loginData } = await api.auth.login(trem);
 
-    } 
-  }
-
-  const onSubmit = (data) => {
-    login(data.email, data.password)
-    // try {
-    //   setIsLoading(true);
-    //   const { data: loginData } = await login(data.email, data.password);
-    //   console.log("data", loginData)
-
-
-    //   auth.setToken(loginData.token);
-    //   auth.setUser(loginData.user);
-    // } catch (e) {
-    //   // if (e.response.status !== 200) {
-    //   //   Object.keys(e.response.data.errors).forEach((key) => {
-    //   //     setError(key, {
-    //   //       type: "manual",
-    //   //       message: e.response.data.errors[key],
-    //   //     });
-    //   //   });
-    //   // }
-    // } finally {
-    //   setIsLoading(false);
-    // }
+      auth.setToken(loginData.token);
+      auth.setUser(loginData.user);
+    } catch (e) {
+      if (e.response.status === 422) {
+        Object.keys(e.response.data.errors).forEach((key) => {
+          setError(key, {
+            type: "manual",
+            message: e.response.data.errors[key],
+          });
+        });
+      }
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (

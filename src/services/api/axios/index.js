@@ -2,15 +2,11 @@ import axios from "axios";
 import Cookies from "js-cookie";
 
 const axiosInstance = axios.create({
-  baseURL: "https://parsers-test.useid.pro/api/",
-  headers: {"Access-Control-Allow-Origin": "*"},
-  withCredentials: true,
-}, );
+  baseURL: "/api",
+});
 
 axiosInstance.interceptors.request.use(
-  
   (config) => {
-    // debugger
     const authToken = Cookies.get("auth-token");
 
     if (authToken) {
