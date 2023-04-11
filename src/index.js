@@ -6,5 +6,5 @@ app.get('/', (req, res) => {
     res.send(helloMess);
 });
 app.listen(4000, () => {
-    console.log('Server listening on port 4rr000');
+    console.log('Server listening on port 4000');
 });
